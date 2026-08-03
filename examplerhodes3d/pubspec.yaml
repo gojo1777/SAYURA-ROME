@@ -56,7 +56,7 @@ dependencies:
   #event: ^2.1.2
   shared_preferences: ^2.2.3
   widget_zoom: ^0.0.4
-  font_awesome_flutter: ^10.7.0
+  font_awesome_flutter: 10.7.0
   widget_and_text_animator: ^1.1.5
   fluttertoast: ^8.2.6
   flutter_user_guildance: ^2.0.7
