@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
     <application
-        android:label="Lindos 1522"
+        android:label="SAYURA ROME"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcheri"
         android:allowBackup="false"
