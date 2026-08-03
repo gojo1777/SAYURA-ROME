@@ -29,13 +29,16 @@ subprojects {
 // Fix for older plugins (e.g. openworld_gl) published before AGP required
 // an explicit `namespace` in build.gradle. AGP 8+ no longer infers the
 // namespace from AndroidManifest.xml's package attribute, so we patch it
-// in here automatically for any subproject missing it.
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            def androidExt = project.extensions.findByName('android')
+// in here automatically for any subproject missing it. We hook into
+// plugins.withId (fires as soon as the plugin is applied) instead of
+// afterEvaluate, since by the time subprojects afterEvaluate runs with
+// Flutter's newer plugin loader, the project may already be evaluated.
+subprojects { subproject ->
+    ['com.android.library', 'com.android.application'].each { pluginId ->
+        subproject.plugins.withId(pluginId) {
+            def androidExt = subproject.extensions.findByName('android')
             if (androidExt != null && androidExt.hasProperty('namespace') && androidExt.namespace == null) {
-                def manifestFile = file("${project.projectDir}/src/main/AndroidManifest.xml")
+                def manifestFile = subproject.file('src/main/AndroidManifest.xml')
                 if (manifestFile.exists()) {
                     def manifestXml = new XmlSlurper().parse(manifestFile)
                     def packageName = manifestXml.@package.text()
