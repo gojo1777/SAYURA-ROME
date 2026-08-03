@@ -51,6 +51,21 @@ subprojects { subproject ->
     }
 }
 
+// Fix for "Inconsistent JVM-target compatibility" errors in older plugins
+// (e.g. openworld_gl) that don't pin a Kotlin jvmTarget themselves and end
+// up inheriting Java 17 (from CI's setup-java) for Kotlin while their javac
+// stays at 1.8. Force every subproject's Kotlin compile tasks to 1.8 to
+// match, right when the Kotlin plugin is applied.
+subprojects { subproject ->
+    subproject.plugins.withId('org.jetbrains.kotlin.android') {
+        subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
